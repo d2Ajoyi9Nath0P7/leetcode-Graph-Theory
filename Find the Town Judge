@@ -1,0 +1,20 @@
+int findJudge(int n, vector<vector<int>>& trust)
+{
+    map<int,int>innode;
+    map<int,int>outnode;
+
+    for(int i = 0 ; i < trust.size(); i++)
+    {
+        innode[trust[i][1]]++;
+        outnode[trust[i][0]]++;
+    }
+
+    for(int i = 1 ; i <= n ; i++)
+    {
+        if(innode[i] == n-1 && outnode[i] == 0)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
