@@ -1,0 +1,47 @@
+vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites)
+{
+    vector<int>vec[numCourses];
+    vector<int>in(numCourses,0);
+    int size = prerequisites.size();
+    for(int i = 0 ; i < size; i++)
+    {
+        int pre = prerequisites[i][1];
+        int post = prerequisites[i][0];
+        vec[pre].push_back(post);
+        in[post]++;
+    }
+    queue<int>q;
+    for(int i = 0 ; i < numCourses; i++)
+    {
+        if(in[i] == 0)
+        {
+            q.push(i);
+        }
+    }
+    vector<int>res;
+    while(!q.empty())
+    {
+        int q_front = q.front();
+        res.push_back(q_front);
+        q.pop();
+
+        for(int child : vec[q_front])
+        {
+            in[child]--;
+            if(in[child] == 0)
+            {
+                q.push(child);
+            }
+        }
+    }
+
+    if(res.size() == numCourses)
+    {
+        return res;
+    }
+    else
+    {
+        res.clear();
+        return res;
+    }
+}
