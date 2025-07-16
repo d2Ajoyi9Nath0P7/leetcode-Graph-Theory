@@ -1,0 +1,53 @@
+bool solve(int node,vector<int>&color,vector<vector<int>>&adj)
+{
+    queue<int>q;
+    q.push(node);
+    color[node] = 1;
+    while(!q.empty())
+    {
+        int front = q.front();
+        q.pop();
+        for(int child : adj[front])
+        {
+            if(color[child] == -1)
+            {
+                color[child] = !color[front];
+                q.push(child);
+            }
+            else
+            {
+                if(color[child] == color[front])
+                {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+bool isBipartite(vector<vector<int>>& graph)
+{
+    int n = graph.size();
+    vector<vector<int>>adj(n);
+    for(int i = 0 ; i < graph.size(); i++)
+    {
+        for(int j = 0 ; j < graph[i].size(); j++)
+        {
+            adj[i].push_back(graph[i][j]);
+            adj[graph[i][j]].push_back(i);
+        }
+    }
+    vector<int>color(n,-1);
+    for(int i = 0 ; i < n ; i++)
+    {
+        if(color[i] == -1)
+        {
+            if(!solve(i,color,adj))
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
