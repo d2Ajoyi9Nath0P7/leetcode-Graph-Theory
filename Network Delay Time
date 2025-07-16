@@ -1,0 +1,50 @@
+void dijkstra(int startNode,vector<pair<int,int>>ADJ[],vector<int>&vis,vector<int>&dis,set<pair<int,int>>&st)
+{
+    dis[startNode] = 0;
+    st.insert({0,startNode});
+
+    while(st.size() > 0)
+    {
+        auto front = *st.begin();
+        int distance = front.first;
+        int node = front.second;
+        vis[node] = 1;
+        st.erase(st.begin());
+        for(auto i : ADJ[node])
+        {
+            int child_n = i.first;
+            int wt = i.second;
+            if(vis[child_n] == 0)
+            {
+                if(dis[child_n] > wt + dis[node])
+                {
+                    dis[child_n] = wt + dis[node];
+                    st.insert({dis[child_n],child_n});
+                }
+            }
+        }
+    }
+}
+int networkDelayTime(vector<vector<int>>& times, int n, int k)
+{
+    vector<pair<int,int>>ADJ[n+1];
+    vector<int>vis(n+1,0);
+    set<pair<int,int>>st;
+    vector<int>dis(n+1,INT_MAX);
+    for(int i = 0 ; i < times.size() ; i++)
+    {
+        int j = times[i][0];
+        ADJ[j].push_back({times[i][1],times[i][2]});
+    }
+    dijkstra(k,ADJ,vis,dis,st);
+    int maxi = 0;
+    for(int i = 1 ; i <= n ; i++)
+    {
+        if(dis[i] == INT_MAX)
+        {
+            return -1;
+        }
+        maxi = max(maxi,dis[i]);
+    }
+    return maxi;
+}
