@@ -1,0 +1,38 @@
+void dfs(int node,vector<int>&vis,vector<int>adj[])
+{
+    vis[node] = 1;
+    for(auto child : adj[node])
+    {
+        if(!vis[child])
+        {
+            dfs(child,vis,adj);
+        }
+    }
+}
+int makeConnected(int n, vector<vector<int>>& connections)
+{
+    int m = connections.size();
+    vector<int>adj[n];
+    for(auto it : connections)
+    {
+        int u = it[0];
+        int v = it[1];
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    if(n-1 > m)//4 3
+    {
+        return -1;
+    }
+    vector<int>vis(n,0);
+    int cc = 0;
+    for(int i = 0 ; i < n ; i++)
+    {
+        if(!vis[i])
+        {
+            cc++;
+            dfs(i,vis,adj);
+        }
+    }
+    return cc-1;
+}
